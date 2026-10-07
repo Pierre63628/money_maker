@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+var/
+.DS_Store
+
+# never commit credentials
+var/secrets/

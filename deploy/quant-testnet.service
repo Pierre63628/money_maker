@@ -1,0 +1,23 @@
+[Unit]
+Description=Crowding strategy on the Binance futures testnet (forward test, fake money)
+After=network-online.target chrony.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/opt/money_maker
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/money_maker/.venv/bin/python scripts/paper_trade.py \
+    --experiment crowding_top50_4h --candidate 0 --loop --shadow \
+    --broker testnet --history-days 120
+Restart=always
+RestartSec=60
+# the loop holds ~200 MB; this keeps a leak from taking the box down
+MemoryMax=1G
+CPUQuota=150%
+StandardOutput=append:/opt/money_maker/var/logs/testnet_loop.log
+StandardError=append:/opt/money_maker/var/logs/testnet_loop.log
+
+[Install]
+WantedBy=multi-user.target
